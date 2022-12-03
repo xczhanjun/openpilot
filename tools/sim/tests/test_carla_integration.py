@@ -42,7 +42,11 @@ class TestCarlaIntegration(unittest.TestCase):
 
     sm = messaging.SubMaster(['controlsState', 'carEvents', 'managerState'])
     q = Queue()
-    carla_bridge = CarlaBridge(bridge.parse_args([]))
+    host = os.environ.get('WITCARLA_SERVICE_HOST','witcarla')
+    port = os.environ.get('WITCARLA_SERVICE_PORT','2000')
+    wargs = ["--host",host,"--port",port]
+    carla_bridge = CarlaBridge(bridge.parse_args(wargs))
+
     p_bridge = carla_bridge.run(q, retries=10)
     self.processes.append(p_bridge)
 

@@ -1,0 +1,5 @@
+FROM registry.tongxin.cn/witpilot-pub/openpilot-sim:latest
+ENV PYTHONPATH /openpilot:${PYTHONPATH}
+WORKDIR /openpilot
+RUN apt-get update && apt-get install -y vim wget lsof htop
+COPY tests/test_carla_integration.py /openpilot/tools/sim/tests/test_carla_integration.py

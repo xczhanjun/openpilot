@@ -15,7 +15,7 @@ else
   # expose X to the container
   xhost +local:root
 
-  docker pull ghcr.io/commaai/openpilot-sim:latest
+  docker pull ghcr.nju.edu.cn/commaai/openpilot-sim:latest
   CMD="./tmux_script.sh $*"
   EXTRA_ARGS="${EXTRA_ARGS} -it"
 fi
@@ -24,8 +24,6 @@ docker kill openpilot_client || true
 docker run --net=host\
   --name openpilot_client \
   --rm \
-  --gpus all \
-  --device=/dev/dri:/dev/dri \
   --device=/dev/input:/dev/input \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   --shm-size 1G \
@@ -33,5 +31,5 @@ docker run --net=host\
   -e QT_X11_NO_MITSHM=1 \
   -w "$OPENPILOT_DIR/tools/sim" \
   $EXTRA_ARGS \
-  ghcr.io/commaai/openpilot-sim:latest \
+  ghcr.nju.edu.cn/commaai/openpilot-sim:latest \
   /bin/bash -c "$CMD"
