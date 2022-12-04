@@ -14,17 +14,16 @@ fi
 
 export HOSTNAME=`hostname`
 xhost + ${hostname}
-
+# --net host 
 docker kill carla_sim || true
 docker run \
   --name carla_sim \
   --rm \
-  --net=host \
+  -p 2000:2000 -p 2001:2001 -p 2002:2002 \
   -e DISPLAY=${HOSTNAME}:0 \
   --env=QT_X11_NO_MITSHM=1 \
   --env=XAUTHORITY=/home/carla/.Xauthority \
   -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
   $EXTRA_ARGS \
-  witcarla/carla:wit \
-  /bin/bash
-  #./CarlaUE4.sh  -nosound -RenderOffScreen -benchmark -fps=20 -quality-level=Low
+  registry.tongxin.cn/witcarla/carla:wit \
+  /bin/bash ./CarlaUE4.sh  -nosound -RenderOffScreen -benchmark -fps=20 -quality-level=Low
