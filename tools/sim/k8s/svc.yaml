@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  labels:
+    k8s.kuboard.cn/layer: svc
+    witsim: carla
+  name: witcarla-cluster
+  namespace: openpilot
+spec:
+  clusterIP: 10.100.58.244
+  clusterIPs:
+    - 10.100.58.244
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: c2000
+      port: 2000
+      protocol: TCP
+      targetPort: 2000
+    - name: c2001
+      port: 2001
+      protocol: TCP
+      targetPort: 2001
+    - name: c2002
+      port: 2002
+      protocol: TCP
+      targetPort: 2002
+  selector:
+    k8s.kuboard.cn/layer: svc
+    witsim: carla
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  type: ClusterIP
+

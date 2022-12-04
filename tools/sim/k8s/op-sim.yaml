@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: openpilot-sim-gpu-0001
+  name: openpilot-sim-gpu-0001
+  namespace: openpilot
+  resourceVersion: '102453936'
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/layer: web
+      k8s.kuboard.cn/name: openpilot-sim-gpu-0001
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2022-12-04T12:27:12+08:00'
+      creationTimestamp: null
+      labels:
+        k8s.kuboard.cn/layer: web
+        k8s.kuboard.cn/name: openpilot-sim-gpu-0001
+    spec:
+      containers:
+        - args:
+            - /openpilot/tools/sim/tests/test_carla_integration.py
+          command:
+            - /bin/bash
+            - '-c'
+          env:
+            - name: QT_X11_NO_MITSHM
+              value: '1'
+            - name: CI
+              value: '1'
+            - name: WITCARLA_PORT
+              value: '2000'
+            - name: WITCARLA_HOST
+              value: witcarla-cluster
+          image: 'registry.tongxin.cn/witpilot-pub/openpilot-sim-wit:latest'
+          imagePullPolicy: Always
+          name: openpilot-sim-gpu-0001
+          resources:
+            limits:
+              nvidia.com/gpu: '1'
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          workingDir: /openpilot/tools/sim
+      dnsConfig: {}
+      dnsPolicy: ClusterFirstWithHostNet
+      imagePullSecrets:
+        - name: wit
+      nodeName: gpu-0001
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
